@@ -1,10 +1,10 @@
 # Time Table Generation
 
-The aim of this project is to help educational department to create/manage schedule for the upcoming semesters. This project is build during Innopolis University S19 Software Project course.
+The aim of this project is to help the education department to create/manage a schedule for the upcoming semesters. This project is built during the Innopolis University S19 Software Project course.
 
 ## Getting Started
 
-Project is divided upon two repositories.
+Project is divided into two repositories.
 
 Backend repository: https://github.com/Mirlan-code/Time-Table-Scheduling
 
@@ -20,7 +20,7 @@ Frontend repository: https://github.com/aamarsel/atts
 
 #### Backend
 
-To generate executable .jar file you need to perform following steps: 
+To generate the executable .jar file you need to perform the following steps: 
 
 1. Clone repository 
 ```
@@ -38,7 +38,7 @@ java -jar target/<jar-file-name>.jar
 
 ### Frontend
 
-The installation process of the frontend part of this application is described in its repositury readme file.
+The installation process of the frontend part of this application is described in its repository readme file.
 
 ## Running the tests
 
