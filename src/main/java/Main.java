@@ -1,4 +1,5 @@
 import algorithms.TimeTable;
+import io.JSONWrapper;
 import io.Parser;
 
 import java.io.File;
