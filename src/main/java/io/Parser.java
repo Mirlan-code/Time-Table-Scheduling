@@ -45,7 +45,7 @@ public class Parser
         List<Lesson> lessons = parseLessons(new FileInputStream(WD.getPath() + File.separator + LESSONS_FILE_NAME),
                 courses, teachers);
 
-        return new TableResult(ts, lessons, workingDays);
+        return new TableResult(ts, lessons, workingDays, groups);
     }
 
 
@@ -64,7 +64,7 @@ public class Parser
             if (line.length < 2) throw new IncorrectFileStructureException(l, "Should be Name of course, and at least one pair of Type:TeacherID");
             if (!courses.containsKey(line[0])) throw new IncorrectFileStructureException(l, "There's no such a course named "+line[0]);
             NCourse course = courses.get(line[0]);
-            Iterator<StudentsGroup> groupIterator = course.group.child.values().iterator();
+            Iterator<StudentsGroup> groupIterator = course.group.getChild().values().iterator();
 
             for (int i = 1; i < line.length; i++) {
                 String[] st = line[i].split(":");
@@ -87,7 +87,7 @@ public class Parser
                     StudentsGroup g = groupIterator.next();
                     lesson.setAssignedGroup(g);
                 }else{
-                    lesson.setAssignedGroup(course.group.parent);
+                    lesson.setAssignedGroup(course.group.getParent());
                 }
                 toRet.add(lesson);
             }
@@ -252,11 +252,11 @@ public class Parser
                 tr.put(grade, new YearGroup(new StudentsGroup(grade, studentsNumber)));
             }
             YearGroup curr = tr.get(grade);
-            curr.parent.addStudent(id);
+            curr.getParent().addStudent(id);
 
-            if (!curr.child.containsKey(studentGroup))
-                curr.child.put(studentGroup, new StudentsGroup(studentGroup, studentsNumber));
-            curr.child.get(studentGroup).addStudent(id);
+            if (!curr.getChild().containsKey(studentGroup))
+                curr.addChild(new StudentsGroup(studentGroup, studentsNumber));
+            curr.getChild().get(studentGroup).addStudent(id);
 
             id++;
         }
@@ -313,28 +313,17 @@ public class Parser
         }
     }
 
-    private class YearGroup{
-        StudentsGroup parent;
-        HashMap<String, StudentsGroup> child = new HashMap<>();
-        YearGroup(StudentsGroup parent) { this.parent = parent; }
-        @Override
-        public String toString() {
-            return "YearGroup{" +
-                    "parent=" + parent +
-                    ", child=" + child +
-                    '}';
-        }
-    }
-
     //Class for returning parsing result
     public class TableResult{
         private List<TimeSlot> timeSlots;
         private List<Lesson> lessons;
+        private Map<String, YearGroup> groupMap;
         private int workingDays;
 
-        public TableResult(List<TimeSlot> timeSlots, List<Lesson> lessons, int workingDays) { this.timeSlots = timeSlots;this.lessons = lessons; this.workingDays = workingDays;}
+        public TableResult(List<TimeSlot> timeSlots, List<Lesson> lessons, int workingDays, Map<String, YearGroup> groupMap) { this.timeSlots = timeSlots;this.lessons = lessons; this.workingDays = workingDays; this.groupMap = groupMap;}
         public List<TimeSlot> getTimeSlots() { return timeSlots; }
         public List<Lesson> getLessons() { return lessons; }
+        public Map<String, YearGroup> getGroupMap() { return groupMap; }
         public int getWorkingDays() { return workingDays; }
     }
 
