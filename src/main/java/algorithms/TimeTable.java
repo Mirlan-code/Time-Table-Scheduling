@@ -108,7 +108,7 @@ public class TimeTable {
         }
         boolean size_found = false;
         for(int i = 0; i<timeSlot.getAvailableClassrooms().size(); i++){
-            if(lesson.getAssignedGroup().getMaxStudentsNumber() <= timeSlot.getAvailableClassrooms().get(i).getCapacity()){
+            if(lesson.getAssignedGroup().getStudentsNumber() <= timeSlot.getAvailableClassrooms().get(i).getCapacity()){
                 size_found = true;
             }
         }
@@ -164,7 +164,7 @@ public class TimeTable {
     private void addLesson(TimeSlot timeSlot, Lesson lesson) {
         timeSlot.addLesson(lesson);
         for(int i = 0; i<timeSlot.getAvailableClassrooms().size(); i++){
-            if(lesson.getAssignedGroup().getMaxStudentsNumber() <= timeSlot.getAvailableClassrooms().get(i).getCapacity()){
+            if(lesson.getAssignedGroup().getStudentsNumber() <= timeSlot.getAvailableClassrooms().get(i).getCapacity()){
                 lesson.setClassroom(timeSlot.getAvailableClassrooms().get(i));
                 timeSlot.getAvailableClassrooms().remove(i);
                 return;
