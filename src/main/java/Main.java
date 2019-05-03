@@ -1,6 +1,6 @@
 import algorithms.TimeTable;
-import io.JSONWrapper;
 import io.Parser;
+import io.XSLXFullScheduleGenerator;
 
 import java.io.File;
 
@@ -12,7 +12,12 @@ public class Main {
         try {
             Parser p = new Parser();
             Parser.TableResult r = p.parseAll(new File(DIR));
-            new TimeTable(r.getTimeSlots(), r.getWorkingDays(), r.getLessons()).printTimeTable();
+            TimeTable tt = new TimeTable(r.getTimeSlots(), r.getWorkingDays(), r.getLessons());
+            tt.printTimeTable();
+
+            XSLXFullScheduleGenerator g = new XSLXFullScheduleGenerator();
+            g.generate("file.xlsx", tt, r.getGroupMap());
+
         }catch (Exception e){
             e.printStackTrace();
             System.out.println(e.getMessage());
