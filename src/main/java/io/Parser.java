@@ -91,6 +91,8 @@ public class Parser
                 }
                 toRet.add(lesson);
             }
+            if (groupIterator.hasNext())
+                throw new IncorrectFileStructureException(l, "Too few lab sessions. Not enough for all the groups");
             l++;
         }
 

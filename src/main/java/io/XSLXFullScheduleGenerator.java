@@ -64,21 +64,20 @@ public class XSLXFullScheduleGenerator extends AbstractXLSXGenerator{
                     for (Lesson l: t.getLessons()){
                         if (!paddings.containsKey(l.getAssignedGroup().name)){
                             int offset = 1;
-                            for (int i = 0; i < keys.size(); i++){
-                                if (keys.get(i).equals(l.getAssignedGroup().name)){
-                                    merge(currentRow + tsn, currentRow + tsn, offset, offset + groups.get(keys.get(i)).getChild().size()-1);
+                            for (String key : keys) {
+                                if (key.equals(l.getAssignedGroup().name)) {
+                                    merge(currentRow + tsn, currentRow + tsn, offset, offset + groups.get(key).getChild().size() - 1);
                                     set(currentRow + tsn, offset, style(CENTER),
-                                            String.format("%s\n%s\n%s\n", l.getCourse().courseName, l.getAssignedTeacher().getName(), l.getClassroom()));
+                                            String.format("%s\n%s\n%s\n", l.getCourse().courseName, l.getAssignedTeacher().getName(), l.getClassroom().getName()));
 
                                     break;
                                 }
-                                offset += groups.get(keys.get(i)).getChild().size();
+                                offset += groups.get(key).getChild().size();
                             }
-
                         }else {
                             int offset = paddings.get(l.getAssignedGroup().name);
                             set(currentRow + tsn, offset, style(CENTER),
-                                    String.format("%s\n%s\n%s\n", l.getCourse().courseName, l.getAssignedTeacher().getName(), l.getClassroom()));
+                                    String.format("%s\n%s\n%s\n", l.getCourse().courseName, l.getAssignedTeacher().getName(), l.getClassroom().getName()));
                         }
                     }
 
@@ -94,13 +93,10 @@ public class XSLXFullScheduleGenerator extends AbstractXLSXGenerator{
                 currentRow += 1 + day.size();
             }
 
+            for (int i = 0; i < cs; i++)
+                set(currentRow, i, style(B_TOP));
 
             save(file);
-//            row.createCell(0).setCellValue("Hello there!");
-//            XSSFCell cell = row.createCell(1);
-//            cell.setCellValue("General Kenobi!!");
-//            sheet.autoSizeColumn(cell.getColumnIndex());
-
         }
     }
 
