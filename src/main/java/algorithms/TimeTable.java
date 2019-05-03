@@ -102,8 +102,18 @@ public class TimeTable {
 
 
     private boolean canAddLesson(TimeSlot timeSlot, Lesson lesson, List<Lesson> availableLessons, int day, int timeSlotNumber) { // TODO: all possible conditions for adding the lesson to the current time slot
-        if (timeSlot.getAvailableClassrooms().size() <= timeSlot.getLessons().size()) {
+        if (timeSlot.getAvailableClassrooms().size() == 0) {
             System.err.println(1);
+            return false;
+        }
+        boolean size_found = false;
+        for(int i = 0; i<timeSlot.getAvailableClassrooms().size(); i++){
+            if(lesson.getAssignedGroup().getMaxStudentsNumber() <= timeSlot.getAvailableClassrooms().get(i).getCapacity()){
+                size_found = true;
+            }
+        }
+        // if there is no room with needed size
+        if(size_found == false){
             return false;
         }
         // is this time slot is good for the teacher
@@ -112,6 +122,7 @@ public class TimeTable {
             System.err.println(2);
             return false;
         }
+
         Course course = lesson.getCourse();
         CourseClassType courseClassType = lesson.getCourseClassType();
         for (int i = 0; i < course.getClassesOrder().size(); i++) {
@@ -152,6 +163,13 @@ public class TimeTable {
 
     private void addLesson(TimeSlot timeSlot, Lesson lesson) {
         timeSlot.addLesson(lesson);
+        for(int i = 0; i<timeSlot.getAvailableClassrooms().size(); i++){
+            if(lesson.getAssignedGroup().getMaxStudentsNumber() <= timeSlot.getAvailableClassrooms().get(i).getCapacity()){
+                lesson.setClassroom(timeSlot.getAvailableClassrooms().get(i));
+                timeSlot.getAvailableClassrooms().remove(i);
+                return;
+            }
+        }
     }
 
     private void removeLesson(TimeSlot timeSlot, Lesson lesson) {
@@ -214,7 +232,7 @@ public class TimeTable {
                 for (int k = 0; k < timeSlot.getLessons().size(); k++) {
                     System.out.print(timeSlot.getLessons().get(k).getCourse().courseName + " "
                             + timeSlot.getLessons().get(k).getCourseClassType().name + " " + timeSlot.getLessons().get(k).getAssignedGroup().name + " "
-                            + timeSlot.getLessons().get(k).getAssignedTeacher().getName() + "\n");
+                            + timeSlot.getLessons().get(k).getAssignedTeacher().getName() + " " + timeSlot.getLessons().get(k).getClassroom().getName() + "\n");
                 }
                 System.out.println();
             }
